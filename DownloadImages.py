@@ -26,12 +26,19 @@ def Download(link: str, output_path: str = 'image.jpg') -> bool:
 
 
 def ResizeImage(image_path: str, width: int = 516, height: int = 516):
-    image = Image.open(image_path)
-    resized_image = image.resize((int(width), int(height)))
-    resized_image.save(image_path)
+    try:
+		#Open Image Path as a PIL object
+		image = Image.open(image_path)
+		#Resize Image
+		resized_image = image.resize((int(width), int(height)))
+		#Overwrite Original Image
+		resized_image.save(image_path)
+	except:
+		print("Failed to resize given image")
 
 
 def main():
+	#CLI creation
     parser = argparse.ArgumentParser(description='Download Images from URLS automatically')
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('--file', '-f', metavar='<file path>', help='Path of the file containing the urls')
@@ -39,18 +46,19 @@ def main():
     parser.add_argument('--output', '-o', metavar='<output path>', help='Path to the output location')
     parser.add_argument('--res', '-r', metavar='<widthxheight>', help='Resolution of the image to download')
     args = parser.parse_args()
-
+	
+	#Create valid inputs
     output_path = args.output or "images/"
     if not os.path.exists(output_path):
         os.makedirs(output_path)
     try:
-        width = args.res.split('x')[0] or 516
-        height = args.res.split('x')[1] or 516
+        width = args.res.split('x')[0]
+        height = args.res.split('x')[1]
     except:
         width = 516
         height = 516
 
-
+	#If Given File Path Proccess all the URL's in that file
     if args.file:
         # Process file
         downloadedImages = []
@@ -61,18 +69,23 @@ def main():
                 print("Downloading image from url: " + urls[i])
                 if Download(urls[i], output_path + str(i) + ".jpg"):
                     downloadedImages.append(output_path + str(i) + ".jpg")  # Add to list of downloaded images 
-
+		
+		
         # Resize images
-        #  TODO: Add resizing functionality
-        for image in downloadedImages:
-            print("Resizing image: " + image)
-            ResizeImage(image_path=image, width=width, height=height)
+		if args.res:
+			for image in downloadedImages:
+				print("Resizing image: " + image)
+				ResizeImage(image_path=image, width=width, height=height)
 
     elif args.url:
         # Process URL
         print("Downloading image from url: " + args.url)
         Download(args.url, output_path + "1.jpg")
-        ResizeImage(output_path + "1.jpg", width=width, height=height)
+		if args.res:
+        	ResizeImage(output_path + "1.jpg", width=width, height=height)
+	else:
+		#! Should never get here
+		raise Exception("Invalid: Must Choose MULTIPLE or SINGULAR")
 
 
 
