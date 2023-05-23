@@ -5,7 +5,7 @@ from time import sleep
 import requests
 from PIL import Image
 
-
+#Download a image directly from a url to that image
 def Download(link: str, output_path: str = 'image.jpg') -> bool:
     #Open a file at output path
     with open(output_path, 'wb') as handle:
@@ -24,7 +24,7 @@ def Download(link: str, output_path: str = 'image.jpg') -> bool:
     #Return True since image was downloaded correctly
     return True
 
-
+#Resize any image to a specific width and height
 def ResizeImage(image_path: str, width: int = 516, height: int = 516) -> None:
     try:
 		#Open Image Path as a PIL object
@@ -36,7 +36,7 @@ def ResizeImage(image_path: str, width: int = 516, height: int = 516) -> None:
 	except:
 		print("Failed to resize given image")
 
-
+#Main Function
 def main():
 	#CLI creation
     parser = argparse.ArgumentParser(description='Download Images from URLS automatically')
