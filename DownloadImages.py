@@ -7,19 +7,21 @@ from PIL import Image
 
 
 def Download(link: str, output_path: str = 'image.jpg') -> bool:
-
+    #Open a file at output path
     with open(output_path, 'wb') as handle:
+	#Create a request for the image 
         response = requests.get(link, stream=True)
+	#If request failed
         if not response.ok:
             print("ERROR: Could not download image")
             print(response)
             return False
-
+	#Write the image to the file
         for block in response.iter_content(1024):
             if not block:
                 break
-
             handle.write(block)
+    #Return True since image was downloaded correctly
     return True
 
 
@@ -70,7 +72,7 @@ def main():
         # Process URL
         print("Downloading image from url: " + args.url)
         Download(args.url, output_path + "1.jpg")
-        ResizeImage("testimage.jpg", width=width, height=height)
+        ResizeImage(output_path + "1.jpg", width=width, height=height)
 
 
 
