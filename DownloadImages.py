@@ -25,7 +25,7 @@ def Download(link: str, output_path: str = 'image.jpg') -> bool:
     return True
 
 
-def ResizeImage(image_path: str, width: int = 516, height: int = 516):
+def ResizeImage(image_path: str, width: int = 516, height: int = 516) -> None:
     try:
 		#Open Image Path as a PIL object
 		image = Image.open(image_path)
@@ -53,9 +53,9 @@ def main():
     if not os.path.exists(output_path):
         os.makedirs(output_path)
 
-    if args.res:
-        width = args.res.split('x')[0]
-        height = args.res.split('x')[1]
+	if args.res:
+		width = args.res.split('x')[0]
+		height = args.res.split('x')[1]
 	
 	file_type = args.type or "jpg"
 	file_type = "." + file_type
@@ -78,7 +78,8 @@ def main():
 			for image in downloadedImages:
 				print("Resizing image: " + image)
 				ResizeImage(image_path=image, width=width, height=height)
-
+				
+	#Download Single Image From URL
     elif args.url:
         # Process URL
         print("Downloading image from url: " + args.url)
