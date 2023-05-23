@@ -45,19 +45,21 @@ def main():
     group.add_argument('--url', '-u', metavar='<url>', help='URL of the image to download')
     parser.add_argument('--output', '-o', metavar='<output path>', help='Path to the output location')
     parser.add_argument('--res', '-r', metavar='<widthxheight>', help='Resolution of the image to download')
+	parser.add_argument('--type', '-t', metavar='<file type>', help='File type of output image ex: "jpg"')
     args = parser.parse_args()
 	
 	#Create valid inputs
     output_path = args.output or "images/"
     if not os.path.exists(output_path):
         os.makedirs(output_path)
-    try:
+
+    if args.res:
         width = args.res.split('x')[0]
         height = args.res.split('x')[1]
-    except:
-        width = 516
-        height = 516
-
+	
+	file_type = args.type or "jpg"
+	file_type = "." + file_type
+	
 	#If Given File Path Proccess all the URL's in that file
     if args.file:
         # Process file
@@ -67,8 +69,8 @@ def main():
             for i in range(len(urls)):
                 urls[i] = urls[i].strip()
                 print("Downloading image from url: " + urls[i])
-                if Download(urls[i], output_path + str(i) + ".jpg"):
-                    downloadedImages.append(output_path + str(i) + ".jpg")  # Add to list of downloaded images 
+                if Download(urls[i], output_path + str(i) + file_type):
+                    downloadedImages.append(output_path + str(i) + file_type)  # Add to list of downloaded images 
 		
 		
         # Resize images
@@ -80,9 +82,9 @@ def main():
     elif args.url:
         # Process URL
         print("Downloading image from url: " + args.url)
-        Download(args.url, output_path + "1.jpg")
+        Download(args.url, output_path + "1" + file_type)
 		if args.res:
-        	ResizeImage(output_path + "1.jpg", width=width, height=height)
+        	ResizeImage(output_path + "1" + file_type, width=width, height=height)
 	else:
 		#! Should never get here
 		raise Exception("Invalid: Must Choose MULTIPLE or SINGULAR")
