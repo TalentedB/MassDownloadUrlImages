@@ -36,6 +36,18 @@ def ResizeImage(image_path: str, width: int = 516, height: int = 516) -> None:
 	except:
 		print("Failed to resize given image")
 
+#Resize any image to a specific width and height
+def CropImage(image_path: str, startx: int = 0, starty: int = 0 width: int = 516, height: int = 516) -> None:
+    try:
+		#Open Image Path as a PIL object
+		image = Image.open(image_path)
+		#Resize Image
+		resized_image = image.crop((int(startx), int(starty), int(width), int(height)))
+		#Overwrite Original Image
+		resized_image.save(image_path)
+	except:
+		print("Failed to resize given image")
+
 #Main Function
 def main():
 	#CLI creation
